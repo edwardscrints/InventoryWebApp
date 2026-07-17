@@ -77,6 +77,22 @@ export const useProductStore = defineStore('product', {
                 this.error = 'Error al eliminar el producto'
                 throw err
             }
+        },
+
+        // Consultar el historial de un producto
+        async fetchProductHistory(id) {
+            this.loading = true
+            this.error = null
+            try {
+                const response = await api.get(`/products/${id}/history`)
+                return response.data
+            } catch (err) {
+                this.error = 'Error al cargar el historial'
+                console.error(err)
+                return []
+            } finally {
+                this.loading = false
+            }
         }
     }
 })

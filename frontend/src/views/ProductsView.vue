@@ -48,8 +48,8 @@
             </td>
             <td class="actions">
              <button class="btn-icon text-blue" @click="openEditModal(product)" title="Editar">EDITAR</button>
-  <button class="btn-icon text-red" title="Eliminar">ELIMINAR</button>
-  <button class="btn-icon text-gray" title="Historial">HISTORIAL</button>
+             <button class="btn-icon text-red" @click="openDeleteModal(product)" title="Eliminar">ELIMINAR</button>
+             <button class="btn-icon text-gray" @click="openHistoryModal(product)" title="Historial">HISTORIAL</button>
             </td>
           </tr>
           <tr v-if="productStore.products.length === 0">
@@ -65,6 +65,20 @@
   @close="closeModal"
   @save="handleSaveProduct"
 />
+<ConfirmDeleteModal 
+  :isOpen="isDeleteModalOpen"
+  :productName="productToDelete?.nombre || ''"
+  :loading="productStore.loading"
+  @close="closeDeleteModal"
+  @confirm="executeDelete"
+/>
+<HistoryModal
+  :isOpen="isHistoryModalOpen"
+  :productName="productNameForHistory"
+  :history="historyData"
+  :loading="productStore.loading"
+  @close="closeHistoryModal"
+/>
   </MainLayout>
 </template>
 
@@ -73,14 +87,18 @@ import { ref, onMounted } from 'vue'
 import { useProductStore } from '../stores/productStore'
 import MainLayout from '../components/MainLayout.vue'
 import ProductModal from '../components/ProductModal.vue'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue'
+import HistoryModal from '../components/HistoryModal.vue'
 
+// Store
 const productStore = useProductStore()
+
+// Datos
 const searchQuery = ref('')
 
 // Estado para controlar el modal
 const isModalOpen = ref(false)
 const selectedProduct = ref(null)
-
 
 onMounted(() => {
   productStore.fetchProducts()
@@ -107,6 +125,25 @@ const closeModal = () => {
   selectedProduct.value = null
 }
 
+// Estado para modal de Eliminación
+const isDeleteModalOpen = ref(false)
+const productToDelete = ref(null)
+
+// Funciones de eliminación
+const openDeleteModal = (product) => {
+  productToDelete.value = product
+  isDeleteModalOpen.value = true
+}
+
+const closeDeleteModal = () => {
+  isDeleteModalOpen.value = false
+  productToDelete.value = null
+}
+// Estado para el modal de Historial
+const isHistoryModalOpen = ref(false)
+const historyData = ref([])
+const productNameForHistory = ref('')
+
 const handleSaveProduct = async (productData) => {
   try {
     if (selectedProduct.value) {
@@ -120,6 +157,30 @@ const handleSaveProduct = async (productData) => {
   } catch (error) {
     alert("Hubo un error al guardar: " + productStore.error)
   }
+}
+
+const executeDelete = async () => {
+  if (!productToDelete.value) return
+  
+  try {
+    await productStore.deleteProduct(productToDelete.value.id)
+    closeDeleteModal()
+  } catch (error) {
+    alert("Error al eliminar: " + productStore.error)
+  }
+}
+
+const openHistoryModal = async (product) => {
+  productNameForHistory.value = product.nombre
+  isHistoryModalOpen.value = true
+  
+  // Llamamos a la tienda para traer los datos reales
+  historyData.value = await productStore.fetchProductHistory(product.id)
+}
+
+const closeHistoryModal = () => {
+  isHistoryModalOpen.value = false
+  historyData.value = []
 }
 </script>
 
