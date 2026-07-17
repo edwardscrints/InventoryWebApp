@@ -7,6 +7,24 @@
       </button>
     </div>
 
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+      <div class="card">
+        <div class="card-icon">📦</div>
+        <div class="card-info">
+          <h3>Total Productos</h3>
+          <p>{{ totalProducts }}</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚠️</div>
+        <div class="card-info">
+          <h3>Bajo Stock</h3>
+          <p>{{ lowStockCount }}</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Barra de Búsqueda -->
     <div class="search-bar">
       <input 
@@ -56,8 +74,14 @@
              <button class="btn-icon text-gray" @click="openHistoryModal(product)" title="Historial">HISTORIAL</button>
             </td>
           </tr>
-          <tr v-if="productStore.products.length === 0">
-            <td colspan="7" class="text-center">No se encontraron productos.</td>
+          <tr v-if="productStore.products.length === 0 && !productStore.loading">
+            <td colspan="7" class="empty-state">
+              <div class="empty-state-content">
+                <span class="empty-icon">🔍</span>
+                <p>No se encontraron productos con tu búsqueda.</p>
+                <button class="btn-secondary" v-if="searchQuery" @click="searchQuery = ''; handleSearch()">Limpiar Búsqueda</button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -87,7 +111,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useProductStore } from '../stores/productStore'
 import MainLayout from '../components/MainLayout.vue'
 import ProductModal from '../components/ProductModal.vue'
@@ -101,6 +125,12 @@ const productStore = useProductStore()
 
 // Datos
 const searchQuery = ref('')
+
+// Computed properties for Dashboard Cards
+const totalProducts = computed(() => productStore.products.length)
+const lowStockCount = computed(() => {
+  return productStore.products.filter(p => p.stock < 10).length
+})
 
 // Estado para controlar el modal
 const isModalOpen = ref(false)
@@ -213,6 +243,40 @@ const closeHistoryModal = () => {
   margin-bottom: 20px;
 }
 
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.card {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.card-icon {
+  font-size: 2.5em;
+}
+
+.card-info h3 {
+  margin: 0;
+  font-size: 1em;
+  color: #7f8c8d;
+}
+
+.card-info p {
+  margin: 5px 0 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
 .search-bar {
   margin-bottom: 20px;
 }
@@ -302,5 +366,37 @@ const closeHistoryModal = () => {
   text-align: center;
   padding: 20px;
   color: #777;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px !important;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #7f8c8d;
+}
+
+.empty-icon {
+  font-size: 3em;
+}
+
+.btn-secondary {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.btn-secondary:hover {
+  background-color: #bdc3c7;
 }
 </style>
