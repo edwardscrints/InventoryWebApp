@@ -1,13 +1,12 @@
 ### Endpoints de api
-### Implementación de los métodos GET, POST, PUT, PATCH y DELETE para productos
+### Implementación de los métodos para gestión y visualizacion de comportamiento ejecutado en los productos
 ### Created By. Ing. Edward Gabriel Acosta
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
-
 from app.database.config import get_db
-from app.schemas.product import ProductCreate, ProductUpdate, ProductResponse
+from app.schemas.product import ProductCreate, ProductUpdate, ProductResponse, ProductHistoryResponse
 from app.services import product as product_service
 
 import logging
@@ -48,3 +47,8 @@ def change_status(id: int, db: Session = Depends(get_db)):
 def delete_product(id: int, db: Session = Depends(get_db)):
     logger.info(f"Petición DELETE recibida para eliminar lógicamente el producto ID: {id}")
     return product_service.delete_product(db=db, product_id=id)
+
+@router.get("/{id}/history", response_model=List[ProductHistoryResponse])
+def get_history(id: int, db: Session = Depends(get_db)):
+    logger.info(f"Petición GET recibida para historial del producto ID: {id}")
+    return product_service.get_product_history(db=db, product_id=id)

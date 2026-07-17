@@ -90,3 +90,12 @@ def change_product_status(db: Session, product_id: int):
     db.commit()
     db.refresh(db_product)
     return db_product
+
+
+def get_product_history(db: Session, product_id: int):
+    ##Verificación
+    get_product_by_id(db, product_id) 
+    
+    return db.query(ProductHistory).filter(
+        ProductHistory.product_id == product_id
+    ).order_by(ProductHistory.created_at.desc()).all()
