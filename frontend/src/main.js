@@ -1,17 +1,15 @@
-// Inyeccion de Pinia y preparacion de vue
+// Inyeccion de Pinia y preparacion de vue, inclusion de router
 // Created By. Ing Edward Acosta
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-
-// Importaremos el router en el siguiente paso
-// import router from './router' 
+import router from './router/router.js'
 
 const app = createApp(App)
 const pinia = createPinia()
 
-// Inyectamos las dependencias
+// Dependencias
 app.use(pinia)
-// app.use(router) // Lo descomentaremos en breve
+app.use(router)
 
 app.mount('#app')
