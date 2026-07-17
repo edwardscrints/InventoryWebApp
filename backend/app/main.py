@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.database.init_db import init_database
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import product
+from app.routes import product
 
 # Configuración del Logger (estilo printf estructurado)
 logging.basicConfig(

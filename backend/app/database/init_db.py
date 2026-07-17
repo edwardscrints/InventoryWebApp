@@ -4,7 +4,8 @@
 
 import os
 from sqlalchemy import text
-from app.database.config import engine
+from app.database.config import engine, Base
+from app.models.product import Product
 
 def init_database():
     """Ejecuta el script SQL inicial si las tablas no existen."""
@@ -26,3 +27,4 @@ def init_database():
                 print(f"Error crítico al ejecutar script.sql: {e}")
         else:
             print("La base de datos ya cuenta con la estructura necesaria.")
+            Base.metadata.create_all(bind=engine)
