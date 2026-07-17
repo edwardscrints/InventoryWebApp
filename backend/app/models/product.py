@@ -15,11 +15,11 @@ class Product(Base):
     nombre = Column(String(100), nullable=False)
     categoria = Column(String(50), nullable=False)
     presentacion = Column(String(20), nullable=False)
-    descripción = Column(Text, nullable=True)
+    descripcion = Column(Text, nullable=True)
     precio = Column(Numeric(10, 2), nullable=False)
     stock = Column(Integer, nullable=False)
     estado = Column(String(20), default="Activo", nullable=False)
-    fecha_creación = Column(DateTime(timezone=True), server_default=func.now())
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
     deleted_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relación uno a muchos con el historial

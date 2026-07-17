@@ -58,13 +58,31 @@ def update_product(db: Session, product_id: int, product_data: ProductUpdate):
     db_product = get_product_by_id(db, product_id)
 
     update_data = product_data.model_dump(exclude_unset=True)
+    cambios = []
+
     for key, value in update_data.items():
-        setattr(db_product, key, value)
+        old_value = getattr(db_product, key)
+        
+        # Check if values actually changed
+        if old_value != value:
+            # Handle Decimal vs float comparison safely
+            import decimal
+            if isinstance(old_value, decimal.Decimal) and isinstance(value, (int, float)):
+                if float(old_value) == float(value):
+                    continue
+            
+            # Handle None vs empty string
+            if old_value is None and value == "":
+                continue
+
+            cambios.append(key)
+            setattr(db_product, key, value)
     
-    _registrar_historial(db, db_product.id, "UPDATE", "Se actualizaron los datos del producto.")
-    
-    db.commit()
-    db.refresh(db_product)
+    if cambios:
+        _registrar_historial(db, db_product.id, "UPDATE", f"Se actualizaron los campos: {', '.join(cambios)}")
+        db.commit()
+        db.refresh(db_product)
+        
     return db_product
 
 def delete_product(db: Session, product_id: int):
