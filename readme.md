@@ -55,14 +55,15 @@ Levanta el contenedor de PostgreSQL ejecutando el siguiente comando en tu termin
 
 ```bash
 docker run --name assisprex-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=inventory_db -p 5432:5432 -d postgres:15-alpine
-
+```
 
 ### 2. Configuración del Backend (FastAPI)
 Abre una nueva terminal en la raíz del proyecto y navega a la carpeta del backend:
 
-Bash
+```bash
 cd backend
 Crea y activa un entorno virtual:
+```
 
 PowerShell
 # En Windows (PowerShell)
@@ -70,9 +71,10 @@ python -m venv venv
 .\venv\Scripts\activate
 Instala las dependencias del proyecto:
 
-Bash
+```bash
 pip install -r requirements.txt
 Configura las variables de entorno:
+```
 
 Crea un archivo .env en la raíz de la carpeta backend.
 
@@ -82,27 +84,30 @@ Fragmento de código
 DATABASE_URL=postgresql://postgres:admin@localhost:5432/inventory_db
 Inicia el servidor Backend:
 
-Bash
+```bash
 uvicorn app.main:app --reload
 El backend arrancará en http://127.0.0.1:8000 y SQLAlchemy creará automáticamente las tablas necesarias en PostgreSQL.
-
+```
 
 ### 3. Configuración del Frontend (Vue 3)
 Abre una nueva terminal en la raíz del proyecto y navega a la carpeta del frontend:
 
-Bash
+```bash
 cd frontend
 Instala las dependencias de Node:
+```
 
-Bash
+```bash
 npm install
 Inicia el servidor de desarrollo:
+```
 
-Bash
+```bash
 npm run dev
 El frontend arrancará y estará disponible en http://localhost:5173.
+```
 
-💻 Uso de la Aplicación
+ Uso de la Aplicación
 Una vez que ambos servidores (Vite y Uvicorn) estén corriendo, abre tu navegador y visita http://localhost:5173.
 
 Utiliza el botón "+ Nuevo Producto" para registrar el primer artículo en la base de datos.
