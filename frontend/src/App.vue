@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <ToastContainer />
   </div>
 </template>
 
 <script setup>
-// Limpio. La lógica está en las vistas y componentes.
+import ToastContainer from './components/ToastContainer.vue'
 </script>
 
 <style>

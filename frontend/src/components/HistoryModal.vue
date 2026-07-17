@@ -1,4 +1,5 @@
 <template>
+<Transition name="fade">
   <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content history-content">
       <div class="modal-header">
@@ -35,6 +36,7 @@
       </div>
     </div>
   </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -158,6 +160,23 @@ const getMarkerClass = (action) => {
 .date { color: #95a5a6; }
 .description { margin: 0; color: #2c3e50; font-size: 0.95rem; }
 
+/* Animación del Modal */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active .modal-content,
+.fade-leave-active .modal-content {
+  transition: transform 0.3s ease;
+}
+.fade-enter-from .modal-content,
+.fade-leave-to .modal-content {
+  transform: scale(0.95);
+}
+
 /* Colores dinámicos */
 .action-badge { padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 0.75rem; color: white;}
 .marker-create { background-color: #2ecc71; }
@@ -165,4 +184,5 @@ const getMarkerClass = (action) => {
 .marker-delete { background-color: #e74c3c; }
 .marker-status { background-color: #f1c40f; color: #333;}
 .marker-default { background-color: #95a5a6; }
+
 </style>

@@ -20,7 +20,7 @@
 
     <!-- Tabla de Productos -->
     <div class="table-container">
-      <div v-if="productStore.loading" class="loading">Cargando datos...</div>
+      <TableSkeleton v-if="productStore.loading" />
       
       <table v-else class="data-table">
         <thead>
@@ -89,6 +89,8 @@ import MainLayout from '../components/MainLayout.vue'
 import ProductModal from '../components/ProductModal.vue'
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue'
 import HistoryModal from '../components/HistoryModal.vue'
+import { useToast } from '../composables/useToast'
+import TableSkeleton from '../components/TableSkeleton.vue'
 
 // Store
 const productStore = useProductStore()
@@ -125,6 +127,9 @@ const closeModal = () => {
   selectedProduct.value = null
 }
 
+//ToastContainer
+const { toasts, showToast, removeToast } = useToast()
+
 // Estado para modal de Eliminación
 const isDeleteModalOpen = ref(false)
 const productToDelete = ref(null)
@@ -149,24 +154,26 @@ const handleSaveProduct = async (productData) => {
     if (selectedProduct.value) {
       // Actualizar
       await productStore.updateProduct(selectedProduct.value.id, productData)
+      showToast('Producto actualizado exitosamente', 'success')
     } else {
       // Crear
       await productStore.createProduct(productData)
+      showToast('Producto creado exitosamente', 'success')
     }
     closeModal()
   } catch (error) {
-    alert("Hubo un error al guardar: " + productStore.error)
+    showToast('Error al guardar: ' + productStore.error, 'error')
   }
 }
 
 const executeDelete = async () => {
   if (!productToDelete.value) return
-  
   try {
     await productStore.deleteProduct(productToDelete.value.id)
+    showToast('Producto eliminado exitosamente', 'success')
     closeDeleteModal()
   } catch (error) {
-    alert("Error al eliminar: " + productStore.error)
+    showToast("Error al eliminar: " + productStore.error, 'error')
   }
 }
 

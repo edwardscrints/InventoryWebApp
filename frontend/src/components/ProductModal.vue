@@ -1,5 +1,5 @@
 <template>
-
+</Transition>
   <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -65,6 +65,7 @@
       </form>
     </div>
   </div>
+</Transition>
 </template>
 
 <script setup>
@@ -205,6 +206,23 @@ label {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #eee;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active .modal-content,
+.fade-leave-active .modal-content {
+  transition: transform 0.3s ease;
+}
+.fade-enter-from .modal-content,
+.fade-leave-to .modal-content {
+  transform: scale(0.95);
 }
 
 .btn {

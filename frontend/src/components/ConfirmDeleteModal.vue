@@ -1,24 +1,26 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
-    <div class="modal-content confirm-content">
-      <div class="modal-header">
-        <h2>Confirmas Eliminación</h2>
-        <button class="close-btn" @click="closeModal">✖</button>
-      </div>
-      
-      <div class="modal-body">
-        <p>¿Estás seguro de que deseas eliminar el producto <strong>{{ productName }}</strong>?</p>
-        <p class="text-danger">Esta acción no se puede deshacer.</p>
-      </div>
+  <Transition name="fade">
+    <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content confirm-content">
+        <div class="modal-header">
+          <h2>Confirmas Eliminación</h2>
+          <button class="close-btn" @click="closeModal">✖</button>
+        </div>
+        
+        <div class="modal-body">
+          <p>¿Estás seguro de que deseas eliminar el producto <strong>{{ productName }}</strong>?</p>
+          <p class="text-danger">Esta acción no se puede deshacer.</p>
+        </div>
 
-      <div class="modal-actions">
-        <button class="btn btn-secondary" @click="closeModal" :disabled="loading">Cancelar</button>
-        <button class="btn btn-danger" @click="confirmDelete" :disabled="loading">
-          {{ loading ? 'Eliminando...' : 'Sí, Eliminar' }}
-        </button>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" @click="closeModal" :disabled="loading">Cancelar</button>
+          <button class="btn btn-danger" @click="confirmDelete" :disabled="loading">
+            {{ loading ? 'Eliminando...' : 'Sí, Eliminar' }}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -101,6 +103,23 @@ const confirmDelete = () => {
   display: flex;
   justify-content: center;
   gap: 15px;
+}
+
+/* Animación del Modal */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active .modal-content,
+.fade-leave-active .modal-content {
+  transition: transform 0.3s ease;
+}
+.fade-enter-from .modal-content,
+.fade-leave-to .modal-content {
+  transform: scale(0.95);
 }
 
 .btn {
