@@ -1,0 +1,190 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7890-1234-assisprex001",
+        "name": "Assisprex API - Gestión de Inventario",
+        "description": "Colección de pruebas para la API de Gestión de Inventario (FastAPI + PostgreSQL).",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Productos",
+            "item": [
+                {
+                    "name": "1. Obtener todos los productos",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/productos",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos"
+                            ]
+                        },
+                        "description": "Obtiene el listado completo de productos activos en el inventario."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "2. Crear un nuevo producto",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"sku\": \"SER0012026\",\r\n    \"nombre\": \"Serum Crecimiento Barba\",\r\n    \"categoria\": \"Cuidado Facial\",\r\n    \"presentacion\": \"200ml\",\r\n    \"descripcion\": \"Serum crecimiento de barba para hombres\",\r\n    \"precio\": 45000,\r\n    \"stock\": 500,\r\n    \"estado\": \"Activo\"\r\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/productos",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos"
+                            ]
+                        },
+                        "description": "Registra un nuevo producto en la base de datos."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "3. Obtener un producto por ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/productos/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos",
+                                "1"
+                            ]
+                        },
+                        "description": "Busca y retorna los detalles de un producto específico mediante su ID."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "4. Actualizar producto (Stock/Datos)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"sku\": \"SER0012026\",\r\n    \"nombre\": \"Serum Crecimiento Barba\",\r\n    \"categoria\": \"Cuidado Facial\",\r\n    \"presentacion\": \"200ml\",\r\n    \"descripcion\": \"Serum crecimiento de barba para hombres\",\r\n    \"precio\": 45000,\r\n    \"stock\": 450,\r\n    \"estado\": \"Activo\"\r\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/productos/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos",
+                                "1"
+                            ]
+                        },
+                        "description": "Actualiza la información general de un producto. Ideal para reflejar los cambios de stock."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "5. Cambiar estado rápido (Patch)",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"estado\": \"Inactivo\"\r\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/productos/1/estado",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos",
+                                "1",
+                                "estado"
+                            ]
+                        },
+                        "description": "Endpoint optimizado para cambiar el estado de Activo a Inactivo sin enviar todo el payload del producto."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "6. Eliminar producto",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/productos/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos",
+                                "1"
+                            ]
+                        },
+                        "description": "Elimina un producto del sistema."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Historial y Auditoría",
+            "item": [
+                {
+                    "name": "7. Obtener historial de cambios",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/productos/1/historial",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "productos",
+                                "1",
+                                "historial"
+                            ]
+                        },
+                        "description": "Retorna la línea de tiempo de auditoría (acciones CREATE, UPDATE) para un producto específico."
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000/api",
+            "type": "string"
+        }
+    ]
+}
