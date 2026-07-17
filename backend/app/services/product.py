@@ -1,4 +1,4 @@
-### clase de CRUD
+### clase de gestion de producto
 ### Implementa la lógica de negocio para productos
 ### Created By. Ing. Edward Gabriel Acosta
 
