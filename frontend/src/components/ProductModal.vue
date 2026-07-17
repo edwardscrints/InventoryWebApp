@@ -1,5 +1,5 @@
 <template>
-</Transition>
+<Transition name="fade">
   <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,7 +53,7 @@
 
         <div class="form-group full-width">
           <label>Descripción</label>
-          <textarea v-model="formData.descripción" rows="3" class="form-control"></textarea>
+          <textarea v-model="formData.descripcion" rows="3" class="form-control"></textarea>
         </div>
         
         <div class="modal-actions">
@@ -84,7 +84,7 @@ const defaultForm = {
   nombre: '',
   categoria: '',
   presentacion: '',
-  descripción: '',
+  descripcion: '',
   precio: '',
   stock: '',
   estado: 'Activo'

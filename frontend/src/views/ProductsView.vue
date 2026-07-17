@@ -42,7 +42,11 @@
             <td>${{ product.precio }}</td>
             <td>{{ product.stock }}</td>
             <td>
-              <span :class="['badge', product.estado === 'Activo' ? 'badge-active' : 'badge-inactive']">
+              <span 
+                :class="['badge', product.estado === 'Activo' ? 'badge-active' : 'badge-inactive']"
+                @click="toggleStatus(product)"
+                title="Clic para cambiar estado"
+              >
                 {{ product.estado }}
               </span>
             </td>
@@ -144,6 +148,16 @@ const closeDeleteModal = () => {
   isDeleteModalOpen.value = false
   productToDelete.value = null
 }
+
+const toggleStatus = async (product) => {
+  try {
+    await productStore.toggleStatus(product.id)
+    showToast(`Estado actualizado con éxito`, 'success')
+  } catch (error) {
+    showToast("Error al cambiar estado: " + productStore.error, 'error')
+  }
+}
+
 // Estado para el modal de Historial
 const isHistoryModalOpen = ref(false)
 const historyData = ref([])
@@ -240,6 +254,13 @@ const closeHistoryModal = () => {
   border-radius: 20px;
   font-size: 0.85em;
   font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+.badge:hover {
+  opacity: 0.8;
 }
 
 .badge-active {
