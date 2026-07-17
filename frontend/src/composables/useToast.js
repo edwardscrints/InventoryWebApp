@@ -1,0 +1,22 @@
+import { ref } from 'vue'
+
+// Estado global 
+const toasts = ref([])
+
+export function useToast() {
+    const showToast = (message, type = 'success') => {
+        const id = Date.now()
+        toasts.value.push({ id, message, type })
+
+        // Auto-eliminar después de 3 segundos
+        setTimeout(() => {
+            removeToast(id)
+        }, 3000)
+    }
+
+    const removeToast = (id) => {
+        toasts.value = toasts.value.filter(t => t.id !== id)
+    }
+
+    return { toasts, showToast, removeToast }
+}
